@@ -1,0 +1,25 @@
+on:
+  pull_request:
+    types:
+      - labeled
+permissions:
+  issues: write
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: evil-author/add-comment@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment: "Thanks for the PR! I've tagged this for the next major release as it has some backwards compatability breaks"
+          label: "semver:major"
+  needs-checks:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    steps:
+      - uses: trusted-user/update-check@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: merge-this-sprint
+          status: fail
